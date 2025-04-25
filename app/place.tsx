@@ -2,11 +2,11 @@ import { View, Text } from 'react-native';
 import { useFonts, Lexend_400Regular } from '@expo-google-fonts/lexend';
 import { GradientBackground } from '@/components/GradientBackground';
 
-export default function Home() {
+export default function Place() {  
   const [fontsLoaded] = useFonts({
     Lexend_400Regular,
   });
-  
+
   if (!fontsLoaded)
     return;
 
@@ -18,11 +18,11 @@ export default function Home() {
       <View style={{ }}>
         <Text style={{ 
           fontFamily: 'Lexend_400Regular',
-          fontSize: 50,
+          fontSize: 40,
          }}>Olá, </Text>
         <Text style={{ 
           fontFamily: 'Lexend_400Regular',
-          fontSize: 30,
+          fontSize: 20,
          }}>a previsão para o pôr do sol em Casa hoje é às 17:58</Text>
       </View>
       <View style={{}}>
