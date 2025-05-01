@@ -52,7 +52,6 @@ export default function Place() {
 
   return (
     <GradientBackground>
-          
       <View>
         <FlatList
           data={locations}
@@ -93,7 +92,6 @@ export default function Place() {
           }
         />
 
-        {/* Add New Location Button */}
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => {
@@ -115,7 +113,6 @@ export default function Place() {
           </View>
         </Modal>
       </View>
-    
     </GradientBackground>
   );
 }
@@ -180,9 +177,9 @@ const styles = StyleSheet.create({
     color: '#888',
   },
   addButton: {
-    backgroundColor: '#6200ee',
+    backgroundColor: '#9381FF',
     padding: 15,
-    margin: 16,
+    marginVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
   },

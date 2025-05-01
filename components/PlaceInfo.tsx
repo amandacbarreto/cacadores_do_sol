@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import MapView, { Region, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, View, ActivityIndicator, Modal, Button } from 'react-native';
+import MapView, { Region, PROVIDER_GOOGLE } from 'react-native-maps';
+import { StyleSheet, View, SafeAreaView, ActivityIndicator, Modal, Button } from 'react-native';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
 import { saveLocation, getLocations } from '../utils/locationStorage';
@@ -130,16 +130,21 @@ export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
         />
       </View>
       <Modal visible={showForm} animationType="slide">
-        <LocationForm
-          onSubmit={handleSaveLocation}
-          onCancel={() => setShowForm(false)}
-        />
+        <SafeAreaView style={styles.saveForm}>
+          <LocationForm
+            onSubmit={handleSaveLocation}
+            onCancel={() => setShowForm(false)}
+          />
+        </SafeAreaView>
       </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  saveForm: {
+    flex: 1
+  },
   container: {
     flex: 1,
     position: 'relative'
