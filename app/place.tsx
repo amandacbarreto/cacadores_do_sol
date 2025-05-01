@@ -51,81 +51,80 @@ export default function Place() {
   };
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={locations}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <View style={styles.itemContent}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.message}>{item.message}</Text>
-              <Text style={styles.coordinates}>
-                {item.region.latitude.toFixed(4)}, {item.region.longitude.toFixed(4)}
-              </Text>
-              {item.isFavorite && <Text style={styles.favorite}>⭐ Favorite</Text>}
+    <GradientBackground>
+          
+      <View>
+        <FlatList
+          data={locations}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <View style={styles.itemContent}>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.message}>{item.message}</Text>
+                <Text style={styles.coordinates}>
+                  {item.region.latitude.toFixed(4)}, {item.region.longitude.toFixed(4)}
+                </Text>
+                {item.isFavorite && <Text style={styles.favorite}>⭐ Favorite</Text>}
+              </View>
+              <View style={styles.itemActions}>
+                <TouchableOpacity
+                  onPress={() => handleDelete(item.id)}
+                  style={styles.deleteButton}
+                >
+                  <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedLocation(item);
+                    setShowMap(true);
+                  }}
+                  style={styles.viewButton}
+                >
+                  <Text style={styles.buttonText}>View</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.itemActions}>
-              <TouchableOpacity
-                onPress={() => handleDelete(item.id)}
-                style={styles.deleteButton}
-              >
-                <Text style={styles.buttonText}>Delete</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setSelectedLocation(item);
-                  setShowMap(true);
-                }}
-                style={styles.viewButton}
-              >
-                <Text style={styles.buttonText}>View</Text>
-              </TouchableOpacity>
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No saved locations yet</Text>
             </View>
-          </View>
-        )}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No saved locations yet</Text>
-          </View>
-        }
-      />
+          }
+        />
 
-      {/* Add New Location Button */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          setSelectedLocation(null);
-          setShowMap(true);
-        }}
-      >
-        <Text style={styles.addButtonText}>+ Add New Location</Text>
-      </TouchableOpacity>
+        {/* Add New Location Button */}
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            setSelectedLocation(null);
+            setShowMap(true);
+          }}
+        >
+          <Text style={styles.addButtonText}>+ Add New Location</Text>
+        </TouchableOpacity>
 
-      <Modal visible={showMap} animationType="slide">
-        <View style={styles.modalContainer}>
-          <SafeAreaView style={styles.editMapContainer}>
-            <PlaceInfo 
-              onClose={() => setShowMap(false)}
-              selectedLocation={selectedLocation}
-            />
-          </SafeAreaView>
-        </View>
-      </Modal>
-    </View>
+        <Modal visible={showMap} animationType="slide">
+          <View style={styles.modalContainer}>
+            <SafeAreaView style={styles.editMapContainer}>
+              <PlaceInfo 
+                onClose={() => setShowMap(false)}
+                selectedLocation={selectedLocation}
+              />
+            </SafeAreaView>
+          </View>
+        </Modal>
+      </View>
+    
+    </GradientBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
   item: {
     backgroundColor: 'white',
     padding: 15,
     marginVertical: 8,
-    marginHorizontal: 16,
     borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
