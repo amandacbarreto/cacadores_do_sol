@@ -44,8 +44,6 @@ export default function Place() {
       ...data
     };
     
-    // Save logic would go here (you'll need to implement this)
-    // Then refresh the list
     const updatedLocations = await getLocations();
     setLocations(updatedLocations);
     setShowForm(false);
@@ -54,7 +52,6 @@ export default function Place() {
 
   return (
     <View style={styles.container}>
-      {/* Locations List */}
       <FlatList
         data={locations}
         keyExtractor={item => item.id}
@@ -105,50 +102,15 @@ export default function Place() {
         <Text style={styles.addButtonText}>+ Add New Location</Text>
       </TouchableOpacity>
 
-      {/* Map Modal for Viewing/Adding Locations */}
       <Modal visible={showMap} animationType="slide">
         <View style={styles.modalContainer}>
-          {selectedLocation ? (
-            <>
-              <MapView
-                style={styles.map}
-                provider={PROVIDER_GOOGLE}
-                initialRegion={selectedLocation.region}
-              >
-                <Marker
-                  coordinate={selectedLocation.region}
-                  title={selectedLocation.name}
-                  description={selectedLocation.message}
-                />
-              </MapView>
-              <View style={styles.modalButtons}>
-                <Button title="Close" onPress={() => setShowMap(false)} />
-              </View>
-            </>
-          ) : (
-            <>
-              <SafeAreaView style={styles.editMapContainer}>
-                <PlaceInfo></PlaceInfo>
-                <View style={styles.modalButtons}>
-                  <Button title="Cancel" onPress={() => setShowMap(false)} />
-                  <Button 
-                    title="Save This Location" 
-                    onPress={() => setShowForm(true)} 
-                    disabled={!selectedLocation}
-                  />
-                </View>
-              </SafeAreaView>
-            </>
-          )}
+          <SafeAreaView style={styles.editMapContainer}>
+            <PlaceInfo 
+              onClose={() => setShowMap(false)}
+              selectedLocation={selectedLocation}
+            />
+          </SafeAreaView>
         </View>
-      </Modal>
-
-      {/* Location Form Modal */}
-      <Modal visible={showForm} animationType="slide">
-        <LocationForm
-          onSubmit={handleSaveNewLocation}
-          onCancel={() => setShowForm(false)}
-        />
       </Modal>
     </View>
   );

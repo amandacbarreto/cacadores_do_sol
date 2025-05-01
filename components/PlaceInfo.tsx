@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapView, { Region, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, View, ActivityIndicator, Modal, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Modal, Button } from 'react-native';
 import * as Location from 'expo-location';
+import { MaterialIcons } from '@expo/vector-icons';
 import { saveLocation, getLocations } from '../utils/locationStorage';
 import { LocationForm } from './LocationForm';
 import { UserLocation } from '@/utils/types'; 
 
+interface PlaceInfoProps {
+  onClose: () => void;
+  selectedLocation: UserLocation | null;
+}
 
-export const PlaceInfo = () => {
+export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
 
   const CLOSE_ZOOM = {
     latitudeDelta: 0.005,
@@ -33,6 +38,21 @@ export const PlaceInfo = () => {
       try {
         const locations = await getLocations();
         setSavedLocations(locations);
+
+        if (selectedLocation) {
+          setRegion({
+            latitude: selectedLocation.region.latitude,
+            longitude: selectedLocation.region.longitude,
+            ...CLOSE_ZOOM
+          });
+          mapRef.current?.animateToRegion({
+            latitude: selectedLocation.region.latitude,
+            longitude: selectedLocation.region.longitude,
+            ...CLOSE_ZOOM
+          }, 1000);
+          setIsLoading(false);
+          return;
+        }
         
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') return;
@@ -92,37 +112,23 @@ export const PlaceInfo = () => {
         ref={mapRef}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        region={region}
-        onRegionChangeComplete={setRegion}
-        // ... other map props
+        initialRegion={region}
+        onRegionChangeComplete={(newRegion) => {
+          setRegion(newRegion);
+        }}
       >
-        <Marker
-          coordinate={{
-            latitude: region.latitude,
-            longitude: region.longitude,
-          }}
-          title="Current Position"
-          pinColor="blue"
-        />
-        
-        {savedLocations.map(location => (
-          <Marker
-            key={location.id}
-            coordinate={location.region}
-            title={location.name}
-            description={location.message}
-            pinColor={location.isFavorite ? 'gold' : 'red'}
-          />
-        ))}
+        <View style={styles.centerMarker}>
+          <MaterialIcons name="place" size={48} color="red" />
+        </View>
       </MapView>
 
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={() => setShowForm(true)}
-      >
-        <Text style={styles.saveButtonText}>Save This Location</Text>
-      </TouchableOpacity>
-
+      <View style={styles.modalButtons}>
+        <Button title="Cancel" onPress={onClose}  />
+        <Button 
+          title="Save This Location" 
+          onPress={() => setShowForm(true)} 
+        />
+      </View>
       <Modal visible={showForm} animationType="slide">
         <LocationForm
           onSubmit={handleSaveLocation}
@@ -136,28 +142,22 @@ export const PlaceInfo = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'relative'
   },
   loadingContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   map: {
-    width: '100%',
-    height: 300,
+    ...StyleSheet.absoluteFillObject
   },
-  marker: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  markerInner: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: 'red',
-    borderWidth: 3,
-    borderColor: 'white',
+  centerMarker: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginLeft: -24,
+    marginTop: -48,
+    zIndex: 1,
   },
   saveButton: {
     position: 'absolute',
@@ -171,4 +171,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+  modalButtons: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
+    backgroundColor: 'white'
+  }
 });
