@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useFonts, Lexend_400Regular } from '@expo-google-fonts/lexend';
 import { GradientBackground } from '@/components/GradientBackground';
+import { getLocations } from '@/utils/locationStorage';
+import * as Location from 'expo-location';
 
 export default function Home() {
   
@@ -12,14 +14,45 @@ export default function Home() {
   const [sunset, setSunset] = useState<string | null>(null);
   const [civilTwilightEnd, setCivilTwilightEnd] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [locationInfo, setLocationInfo] = useState({
+    name: 'Estácio',
+    latitude: 37.78825,
+    longitude: -122.4324
+  });
 
   useEffect(() => {
     const fetchSunsetTime = async () => {
       try {
-        const latitude = 36.7201600;
-        const longitude = -4.4203400;
+        
+        const savedLocations = await getLocations();
+        let targetLocation = savedLocations.find(loc => loc.isFavorite);
+        if (!targetLocation && savedLocations.length > 0) {
+          targetLocation = savedLocations[0];
+          setLocationInfo({
+            name: targetLocation.name,
+            latitude: targetLocation.region.latitude,
+            longitude: targetLocation.region.longitude
+          });
+        }
+
+        if (!targetLocation) {
+          const { status } = await Location.requestForegroundPermissionsAsync();
+          if (status === 'granted') {
+            const position = await Location.getCurrentPositionAsync({});
+            setLocationInfo({
+              name: 'sua localização',
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+          }
+        }
+
+        if (targetLocation) {
+
+        }
+
         const response = await fetch(
-          `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}&formatted=0`
+          `https://api.sunrise-sunset.org/json?lat=${locationInfo.latitude}&lng=${locationInfo.longitude}&formatted=0`
         );
         const data = await response.json();
         const sunsetUTC = data.results.sunset;
@@ -67,12 +100,7 @@ export default function Home() {
           <Text style={{ 
             fontFamily: 'Lexend_400Regular',
             fontSize: 30,
-          }}>A previsão para o pôr do sol em Casa hoje é às {sunset}</Text>
-        </View>
-        <View>
-          <Text>Conquistas</Text>
-          <Text>Esse mês: 15 ☀️</Text>
-          <Text>Essa semana: 2 ☀️</Text>
+          }}>A previsão para o pôr do sol em {locationInfo.name} hoje é às {sunset}</Text>
         </View>
       </View>
     </GradientBackground>

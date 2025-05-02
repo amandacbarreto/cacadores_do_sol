@@ -20,15 +20,19 @@ const LOCATIONS_KEY = 'saved_locations';
 export const saveLocation = async (location: NewLocationData): Promise<UserLocation> => {
     try {
       const saved = await AsyncStorage.getItem(LOCATIONS_KEY);
-      const locations: UserLocation[] = saved ? JSON.parse(saved) : [];
+      let locations: UserLocation[] = saved ? JSON.parse(saved) : [];
   
+      if (location.isFavorite) {
+        locations = locations.map(loc => ({ ...loc, isFavorite: false }));
+      }
+
       const newLocation: UserLocation = {
         ...location,
         region: {
-          latitude: location.region.latitude,
-          longitude: location.region.longitude,
+          latitude: Number(location.region.latitude.toFixed(7)),
+          longitude: Number(location.region.longitude.toFixed(7)),
           latitudeDelta: location.region.latitudeDelta || 0.005,
-          longitudeDelta: location.region.longitudeDelta || 0.005,
+          longitudeDelta: location.region.longitudeDelta || 0.005
         },
         id: generateId(),
         createdAt: Date.now()
@@ -61,7 +65,23 @@ export const saveLocation = async (location: NewLocationData): Promise<UserLocat
     if (!saved) {
         throw new Error('No locations found to update');
     }
-    const locations: UserLocation[] = JSON.parse(saved);
+    let locations: UserLocation[] = JSON.parse(saved);
+
+    if (updates.isFavorite) {
+      locations = locations.map(loc => ({
+        ...loc,
+        isFavorite: loc.id === id ? true : false
+      }));
+    } else if (updates.isFavorite === false) {
+      locations = locations.map(loc => 
+        loc.id === id ? { ...loc, isFavorite: false } : loc
+      );
+    } else {
+      locations = locations.map(loc => 
+        loc.id === id ? { ...loc, ...updates } : loc
+      );
+    }    
+
     const updated = locations.map(loc =>
         loc.id === id ? { ...loc, ...updates } : loc
     );

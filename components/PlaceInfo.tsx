@@ -11,9 +11,10 @@ import { GradientBackground } from './GradientBackground';
 interface PlaceInfoProps {
   onClose: () => void;
   selectedLocation: UserLocation | null;
+  onSaveSuccess: (locations: UserLocation[]) => void;
 }
 
-export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
+export const PlaceInfo = ({ onClose, selectedLocation, onSaveSuccess }: PlaceInfoProps) => {
 
   const CLOSE_ZOOM = {
     latitudeDelta: 0.005,
@@ -33,7 +34,6 @@ export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
   const [showForm, setShowForm] = useState(false);
   const [savedLocations, setSavedLocations] = useState<UserLocation[]>([]);
 
-  // Load saved locations on mount
   useEffect(() => {
   
     const init = async () => {
@@ -88,10 +88,7 @@ export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
       
       if (isExistingLocation) {
         const updated = await updateLocation(formData.id, {
-          name: formData.name,
-          message: formData.message,
-          timeNotification: formData.timeNotification,
-          isFavorite: formData.isFavorite,
+          ...formData,
           region: currentRegion
         });
         if (!updated) {
@@ -109,6 +106,9 @@ export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
       }
       setSavedLocations(updatedLocations);
       setShowForm(false);
+      onSaveSuccess(updatedLocations);
+      setTimeout(() => onClose(), 300);
+
     } catch (error) {
       console.error('Failed to save location', error);
     }

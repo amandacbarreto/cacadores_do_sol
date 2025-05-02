@@ -81,7 +81,6 @@ export const MapLocation = () => {
   return (
     <MapView 
         ref={mapRef}
-        //provider={PROVIDER_GOOGLE}
         style={styles.map}
         region={region}
         onRegionChangeComplete={onRegionChangeComplete}
@@ -92,10 +91,10 @@ export const MapLocation = () => {
         showsIndoors={false}
         showsPointsOfInterest={false}
         showsIndoorLevelPicker={false}
-        customMapStyle={Theme.maps.lightMode}
+        mapPadding={{ top: 0, right: 0, bottom: 50, left: 0 }}
       >
         <Marker
-            anchor={{ x: 0.5, y: 0.5 }}
+            anchor={{ x: 0.5, y: 1 }}
             coordinate={{
               latitude: region.latitude,
               longitude: region.longitude,
@@ -125,14 +124,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   markerInner: {
-    width: 20,
+    position: 'absolute',
+    bottom: -20,
+    width: 2,
     height: 20,
-    borderRadius: 10,
-    backgroundColor: 'red',
-    borderWidth: 3,
-    borderColor: 'white',
+    backgroundColor: 'red' 
   }
 });

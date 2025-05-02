@@ -11,6 +11,7 @@ import { LocationForm } from '@/components/LocationForm';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PlaceInfo } from '@/components/PlaceInfo';
 
+
 export default function Place() {  
   const [locations, setLocations] = useState<UserLocation[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<UserLocation | null>(null);
@@ -108,6 +109,9 @@ export default function Place() {
               <PlaceInfo 
                 onClose={() => setShowMap(false)}
                 selectedLocation={selectedLocation}
+                onSaveSuccess={(updatedLocations) => {
+                  setLocations(updatedLocations);
+                }}
               />
             </SafeAreaView>
           </View>
