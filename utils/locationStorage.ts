@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Region } from 'react-native-maps';
 
-type UserLocation = {
+export interface UserLocation {
     id: string;
     region: Region;
     isFavorite: boolean;
@@ -11,47 +11,67 @@ type UserLocation = {
     createdAt: number;
 }
 
+export type NewLocationData = Omit<UserLocation, 'id' | 'createdAt'>;
+export type LocationUpdates = Partial<Omit<UserLocation, 'id' | 'createdAt'>>;
+export type LocationFormData = (NewLocationData & { id?: never }) | (LocationUpdates & { id: string });
+
 const LOCATIONS_KEY = 'saved_locations';
 
-export const saveLocation = async (location: Omit<UserLocation, 'id' | 'createdAt'>) => {
+export const saveLocation = async (location: NewLocationData): Promise<UserLocation> => {
     try {
-        const saved = await AsyncStorage.getItem(LOCATIONS_KEY);
-        const locations: UserLocation[] = saved ? JSON.parse(saved) : []
-
-        const newLocation: UserLocation = {
-            ...location,
-            id: Date.now().toString(),
-            createdAt: Date.now()
-        };
-
-        await AsyncStorage.setItem(
-            LOCATIONS_KEY,
-            JSON.stringify([...locations, newLocation])
-        );
-        return newLocation;
+      const saved = await AsyncStorage.getItem(LOCATIONS_KEY);
+      const locations: UserLocation[] = saved ? JSON.parse(saved) : [];
+  
+      const newLocation: UserLocation = {
+        ...location,
+        region: {
+          latitude: location.region.latitude,
+          longitude: location.region.longitude,
+          latitudeDelta: location.region.latitudeDelta || 0.005,
+          longitudeDelta: location.region.longitudeDelta || 0.005,
+        },
+        id: generateId(),
+        createdAt: Date.now()
+      };
+  
+      await AsyncStorage.setItem(
+        LOCATIONS_KEY,
+        JSON.stringify([...locations, newLocation])
+      );
+      return newLocation;
     } catch (error) {
-        console.error('Failed to save location', error);
-        throw error;
+      console.error('Failed to save location', error);
+      throw error;
     }
-};
+  };
 
-export const updateLocation = async (id: string, updates: Partial<UserLocation>) => {
-    try {
-        const saved = await AsyncStorage.getItem(LOCATIONS_KEY);
-        if (!saved) return null;
+  export const generateId = () => {
+    return (
+      Date.now().toString(36) +
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+    );
+  };
 
-        const locations: UserLocation[] = JSON.parse(saved);
-        const updated = locations.map(loc =>
-            loc.id == id? {...locations, ...updates} : loc
-        );
-
-        await AsyncStorage.setItem(LOCATIONS_KEY, JSON.stringify(updated));
-        return updated.find( loc => loc.id === id);
-    } catch (error) {
-        console.log('Failed to load locations', error);
-        return [];
+  export const updateLocation = async (
+            id: string, 
+            updates: LocationUpdates
+        ): Promise<UserLocation | null> => {
+    const saved = await AsyncStorage.getItem(LOCATIONS_KEY);
+    if (!saved) {
+        throw new Error('No locations found to update');
     }
-};
+    const locations: UserLocation[] = JSON.parse(saved);
+    const updated = locations.map(loc =>
+        loc.id === id ? { ...loc, ...updates } : loc
+    );
+    await AsyncStorage.setItem(LOCATIONS_KEY, JSON.stringify(updated));
+    const updatedLocation = updated.find(loc => loc.id === id);
+    if (!updatedLocation) {
+        throw new Error('Updated location not found');
+    }
+    return updatedLocation;
+  };
 
 export const getLocations = async (): Promise<UserLocation[]> => {
   try {

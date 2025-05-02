@@ -52,7 +52,7 @@ export default function Place() {
 
   return (
     <GradientBackground>
-      <View>
+      <View style={styles.content}>
         <FlatList
           data={locations}
           keyExtractor={item => item.id}
@@ -118,6 +118,9 @@ export default function Place() {
 }
 
 const styles = StyleSheet.create({
+  content: {
+    padding: 40
+  },
   item: {
     backgroundColor: 'white',
     padding: 15,

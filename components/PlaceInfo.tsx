@@ -3,9 +3,10 @@ import MapView, { Region, PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, View, SafeAreaView, ActivityIndicator, Modal, Button } from 'react-native';
 import * as Location from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
-import { saveLocation, getLocations } from '../utils/locationStorage';
+import { saveLocation, updateLocation, getLocations, NewLocationData, LocationUpdates, LocationFormData } from '../utils/locationStorage';
 import { LocationForm } from './LocationForm';
 import { UserLocation } from '@/utils/types'; 
+import { GradientBackground } from './GradientBackground';
 
 interface PlaceInfoProps {
   onClose: () => void;
@@ -27,6 +28,7 @@ export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
 
   const mapRef = useRef<MapView>(null);
   const [region, setRegion] = useState<Region>(DEFAULT_REGION);
+  const [currentRegion, setCurrentRegion] = useState<Region>(DEFAULT_REGION);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [savedLocations, setSavedLocations] = useState<UserLocation[]>([]);
@@ -79,19 +81,33 @@ export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
     init();
   }, []);
 
-  const handleSaveLocation = async (formData: {
-    name: string;
-    message: string;
-    timeNotification: number;
-    isFavorite: boolean;
-  }) => {
+  const handleSaveLocation = async (formData: UserLocation) => {
     try {
-      const newLocation = await saveLocation({
-        region,
-        ...formData
-      });
+      const isExistingLocation = savedLocations.some(loc => loc.id === formData.id);
+      let updatedLocations: UserLocation[];
       
-      setSavedLocations(prev => [...prev, newLocation]);
+      if (isExistingLocation) {
+        const updated = await updateLocation(formData.id, {
+          name: formData.name,
+          message: formData.message,
+          timeNotification: formData.timeNotification,
+          isFavorite: formData.isFavorite,
+          region: currentRegion
+        });
+        if (!updated) {
+          throw new Error('Error updating location');
+        }
+        updatedLocations = savedLocations.map(loc => 
+          loc.id === formData.id ? updated : loc
+        );
+      } else {
+        const newLocation = await saveLocation({
+          ...formData,
+          region: currentRegion
+        });
+        updatedLocations = [...savedLocations, newLocation];
+      }
+      setSavedLocations(updatedLocations);
       setShowForm(false);
     } catch (error) {
       console.error('Failed to save location', error);
@@ -114,6 +130,7 @@ export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
         style={styles.map}
         initialRegion={region}
         onRegionChangeComplete={(newRegion) => {
+          setCurrentRegion(region);
           setRegion(newRegion);
         }}
       >
@@ -130,12 +147,18 @@ export const PlaceInfo = ({ onClose, selectedLocation }: PlaceInfoProps) => {
         />
       </View>
       <Modal visible={showForm} animationType="slide">
-        <SafeAreaView style={styles.saveForm}>
-          <LocationForm
-            onSubmit={handleSaveLocation}
-            onCancel={() => setShowForm(false)}
-          />
-        </SafeAreaView>
+        <View style={styles.saveForm}>
+          <GradientBackground>
+            <LocationForm    
+              initialData={{
+                ...(selectedLocation || {}),
+                region: currentRegion
+              }}
+              onSubmit={handleSaveLocation}
+              onCancel={() => setShowForm(false)}
+            />
+          </GradientBackground>
+        </View>
       </Modal>
     </View>
   );

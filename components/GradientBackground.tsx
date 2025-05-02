@@ -1,6 +1,7 @@
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ReactNode } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
   children: ReactNode;
@@ -17,9 +18,9 @@ export const GradientBackground = ({ children, style }: Props) => {
         end={{ x: 1, y: 1 }}
         locations={[0, 0.3]}
       >
-        <View style={styles.content}>
+        <SafeAreaView>
           {children}
-        </View>
+        </SafeAreaView>
       </LinearGradient>
     </View>
   );
@@ -37,8 +38,5 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: '#fff',
-  },
-  content: {
-    padding: 40
   }
 });

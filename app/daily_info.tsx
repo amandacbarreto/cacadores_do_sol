@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useFonts, Lexend_400Regular } from '@expo-google-fonts/lexend';
 import { GradientBackground } from '@/components/GradientBackground';
 
@@ -16,7 +16,7 @@ export default function DailyInfo() {
       flex: 1,
       padding: 20
     }}>
-      <View style={{ }}>
+      <View style={styles.content}>
         <Text style={{ 
           fontFamily: 'Lexend_400Regular',
           fontSize: 40,
@@ -29,3 +29,9 @@ export default function DailyInfo() {
     </GradientBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  content: {
+    padding: 40
+  }
+});
