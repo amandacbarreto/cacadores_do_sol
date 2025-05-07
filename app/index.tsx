@@ -16,43 +16,50 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [locationInfo, setLocationInfo] = useState({
     name: 'Estácio',
-    latitude: 37.78825,
-    longitude: -122.4324
+    latitude: -22.9969729,
+    longitude: -43.3549309
   });
 
   useEffect(() => {
     const fetchSunsetTime = async () => {
       try {
-        
         const savedLocations = await getLocations();
         let targetLocation = savedLocations.find(loc => loc.isFavorite);
-        if (!targetLocation && savedLocations.length > 0) {
-          targetLocation = savedLocations[0];
-          setLocationInfo({
+
+        let finalLocation = {
+          name: 'Estácio',
+          latitude: -22.9969729,
+          longitude: -43.3549309
+        };
+        
+        if (targetLocation) {
+          finalLocation = {
             name: targetLocation.name,
             latitude: targetLocation.region.latitude,
             longitude: targetLocation.region.longitude
-          });
-        }
-
-        if (!targetLocation) {
+          };
+        } else if (savedLocations.length > 0) {
+          finalLocation = {
+            name: savedLocations[0].name,
+            latitude: savedLocations[0].region.latitude,
+            longitude: savedLocations[0].region.longitude
+          };
+        } else {
           const { status } = await Location.requestForegroundPermissionsAsync();
           if (status === 'granted') {
             const position = await Location.getCurrentPositionAsync({});
-            setLocationInfo({
+            finalLocation = {
               name: 'sua localização',
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
-            });
+            };
           }
         }
-
-        if (targetLocation) {
-
-        }
+        
+        setLocationInfo(finalLocation);
 
         const response = await fetch(
-          `https://api.sunrise-sunset.org/json?lat=${locationInfo.latitude}&lng=${locationInfo.longitude}&formatted=0`
+          `https://api.sunrise-sunset.org/json?lat=${finalLocation.latitude}&lng=${finalLocation.longitude}&formatted=0`
         );
         const data = await response.json();
         const sunsetUTC = data.results.sunset;
