@@ -1,4 +1,4 @@
-# ☀️ Caçadores do Sol
+# ☀️ Caçadores do sol
 
 ![Caçadores do sol - Banner](Cacadores-do-sol-banner.png)
 
@@ -19,11 +19,11 @@ Aplicativo mobile desenvolvido com React Native + Expo Go, voltado para pessoas 
 
 ## 📅 Cronograma
 
-- **Ação 1:** Entrevistas com trabalhadores autônomos/remotos (14/04–18/04)  
-- **Ação 2:** Protótipos de baixa fidelidade (19/04–24/04)  
-- **Ação 3:** Desenvolvimento com React Native e Expo Go (24/04–14/05)  
-- **Ação 4:** Liberação do MVP para testes (14/05–21/05)  
-- **Ação 5:** Coleta de feedbacks e ajustes (22/05–23/05)
+- **Ação 1:** Entrevistas com o público alvo(14/04 a 18/04)  
+- **Ação 2:** Protótipos de baixa fidelidade (19/04 a 24/04)  
+- **Ação 3:** Desenvolvimento com React Native e Expo Go (24/04 a 14/05)  
+- **Ação 4:** Liberação do MVP para testes (14/05 a 21/05)  
+- **Ação 5:** Coleta de feedbacks (22/05 a 23/05)
 
 ## 🖼️ Telas
 
