@@ -1,50 +1,33 @@
-# Welcome to your Expo app 👋
+☀️ Caçadores do Sol
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicativo mobile desenvolvido com React Native + Expo Go, voltado para pessoas que desejam fazer pausas na rotina para apreciar o pôr do sol, promovendo momentos de bem-estar físico e mental. Este aplicativo foi desenvolvido, como Trabalho de Extensão da disciplina Programação Para Dispositivos Móveis em Android, no curso de Ciência da Computação da Faculdade Estácio de Sá.
 
-## Get started
+🌅 Funcionalidades
 
-1. Install dependencies
+    📍 Cadastro de locais favoritos (CRUD completo)
 
-   ```bash
-   npm install
-   ```
+    🕓 Consulta do horário do pôr do sol em cada local
 
-2. Start the app
+    📬 (Em breve) Notificações personalizadas para planejamento de pausas
 
-   ```bash
-    npx expo start
-   ```
+🛠 Tecnologias
 
-In the output, you'll find options to open the app in a
+    React Native com Expo
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+    AsyncStorage
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+    API pública de Sunset/Sunrise
 
-## Get a fresh project
+    Axios
 
-When you're ready, run:
+📅 Cronograma
 
-```bash
-npm run reset-project
-```
+- **Ação 1:** Entrevistas com trabalhadores autônomos/remotos (14/04–18/04)  
+- **Ação 2:** Protótipos de baixa fidelidade (19/04–24/04)  
+- **Ação 3:** Desenvolvimento com React Native e Expo Go (24/04–14/05)  
+- **Ação 4:** Liberação do MVP para testes (14/05–21/05)  
+- **Ação 5:** Coleta de feedbacks e ajustes (22/05–23/05)
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+🖼️ Telas
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+![Tela inicial](IMG_8726.PNG)![Localizações salvas](IMG_8727.PNG) ![Seleção de localização](IMG_8728.PNG) ![Edição de localização](IMG_8729.png)

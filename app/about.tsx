@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Linking, Pressable  } from 'react-native';
 import { useFonts, Lexend_400Regular } from '@expo-google-fonts/lexend';
 import { GradientBackground } from '@/components/GradientBackground';
 
@@ -16,16 +16,32 @@ export default function About() {
       padding: 20
     }}>
       <View style={styles.content}>
-        <View style={{ }}>
+        <View>
           <Text style={{ 
             fontFamily: 'Lexend_400Regular',
             fontSize: 40,
-          }}>Olá, </Text>
+          }}>
+            Olá,
+          </Text>
+
           <Text style={{ 
             fontFamily: 'Lexend_400Regular',
             fontSize: 20,
+            marginBottom: 10,
           }}>
-            este aplicativo foi desenvolvido por Amanda Barreto, na disciplina de Programação Para Dispositivos Móveis em Android, na Graduação de Ciência da Computação, da faculdade Estácio de Sá. </Text>
+            Este aplicativo foi desenvolvido por Amanda Barreto, na disciplina de Programação Para Dispositivos Móveis em Android, na Graduação de Ciência da Computação, da faculdade Estácio de Sá.
+          </Text>
+
+          <Pressable onPress={() => Linking.openURL('https://sunrise-sunset.org/api')}>
+            <Text style={{ 
+              fontFamily: 'Lexend_400Regular',
+              fontSize: 16,
+              color: '#007AFF',
+              textDecorationLine: 'underline'
+            }}>
+              Dados fornecidos pela API pública Sunrise Sunset
+            </Text>
+          </Pressable>
         </View>
       </View>
     </GradientBackground>
