@@ -140,9 +140,9 @@ export const PlaceInfo = ({ onClose, selectedLocation, onSaveSuccess }: PlaceInf
       </MapView>
 
       <View style={styles.modalButtons}>
-        <Button title="Cancel" onPress={onClose}  />
+        <Button title="Cancelar" onPress={onClose}  />
         <Button 
-          title="Save This Location" 
+          title="Salvar localização" 
           onPress={() => setShowForm(true)} 
         />
       </View>

@@ -24,12 +24,8 @@ export default function About() {
           <Text style={{ 
             fontFamily: 'Lexend_400Regular',
             fontSize: 20,
-          }}>a previsão para o pôr do sol em Casa hoje é às 17:58</Text>
-        </View>
-        <View style={{}}>
-          <Text>Conquistas</Text>
-          <Text>Esse mês: 15 ☀️</Text>
-          <Text>Essa semana: 2 ☀️</Text>
+          }}>
+            este aplicativo foi desenvolvido por Amanda Barreto, na disciplina de Programação Para Dispositivos Móveis em Android, na Graduação de Ciência da Computação, da faculdade Estácio de Sá. </Text>
         </View>
       </View>
     </GradientBackground>

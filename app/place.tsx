@@ -65,14 +65,14 @@ export default function Place() {
                 <Text style={styles.coordinates}>
                   {item.region.latitude.toFixed(4)}, {item.region.longitude.toFixed(4)}
                 </Text>
-                {item.isFavorite && <Text style={styles.favorite}>⭐ Favorite</Text>}
+                {item.isFavorite && <Text style={styles.favorite}>⭐ Favorito</Text>}
               </View>
               <View style={styles.itemActions}>
                 <TouchableOpacity
                   onPress={() => handleDelete(item.id)}
                   style={styles.deleteButton}
                 >
-                  <Text style={styles.buttonText}>Delete</Text>
+                  <Text style={styles.buttonText}>Remover</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -81,14 +81,14 @@ export default function Place() {
                   }}
                   style={styles.viewButton}
                 >
-                  <Text style={styles.buttonText}>View</Text>
+                  <Text style={styles.buttonText}>Editar</Text>
                 </TouchableOpacity>
               </View>
             </View>
           )}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No saved locations yet</Text>
+              <Text style={styles.emptyText}>Nenhuma localização salva</Text>
             </View>
           }
         />
@@ -100,7 +100,7 @@ export default function Place() {
             setShowMap(true);
           }}
         >
-          <Text style={styles.addButtonText}>+ Add New Location</Text>
+          <Text style={styles.addButtonText}>Cadastrar nova localização</Text>
         </TouchableOpacity>
 
         <Modal visible={showMap} animationType="slide">

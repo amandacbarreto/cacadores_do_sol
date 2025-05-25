@@ -17,27 +17,9 @@ export default function Layout() {
          }}
       />
       <Drawer.Screen
-        name="achievement"
-        options={{ drawerLabel: 'Conquistas',
-          title: 'Conquistas' , 
-          headerStyle: {
-            backgroundColor: '#9381FFCC'
-          }
-         }}
-      />
-      <Drawer.Screen
         name="place"
         options={{ drawerLabel: 'Locais',
           title: 'Locais' , 
-          headerStyle: {
-            backgroundColor: '#9381FFCC'
-          }
-         }}
-      />
-      <Drawer.Screen
-        name="daily_info"
-        options={{ drawerLabel: 'Informações diárias',
-          title: 'Informações diárias', 
           headerStyle: {
             backgroundColor: '#9381FFCC'
           }

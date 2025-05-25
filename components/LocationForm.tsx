@@ -43,24 +43,24 @@ export const LocationForm = ({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
           <Text style={styles.header}>
-            {initialData ? 'Edit Location' : 'Add New Location'}
+            {initialData ? 'Editar localização' : 'Cadastrar nova localização'}
           </Text>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Location Name</Text>
+            <Text style={styles.label}>Nome</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter location name"
+              placeholder="Informe o nome da localização"
               value={name}
               onChangeText={setName}
             />
           </View>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Message</Text>
+            <Text style={styles.label}>Mensagem</Text>
             <TextInput
               style={[styles.input, styles.multilineInput]}
-              placeholder="Add a note about this location"
+              placeholder="Informe a mensagem para notificação"
               value={message}
               onChangeText={setMessage}
               multiline
@@ -68,7 +68,7 @@ export const LocationForm = ({
           </View>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Notification Time (minutes)</Text>
+            <Text style={styles.label}>Tempo notificação (minutos)</Text>
             <TextInput
               style={styles.input}
               placeholder="0"
@@ -79,7 +79,7 @@ export const LocationForm = ({
           </View>
 
           <View style={[styles.formGroup, styles.switchContainer]}>
-            <Text style={styles.label}>Favorite Location</Text>
+            <Text style={styles.label}>Localização favorita     </Text>
             <Switch
               value={isFavorite}
               onValueChange={setIsFavorite}
@@ -91,14 +91,14 @@ export const LocationForm = ({
               style={[styles.button, styles.cancelButton]} 
               onPress={onCancel}
             >
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={styles.buttonText}>Cancelar</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               style={[styles.button, styles.submitButton]} 
               onPress={handleSubmit}
             >
               <Text style={styles.buttonText}>
-                {initialData ? 'Update' : 'Save'}
+                {initialData ? 'Atualizar' : 'Salvar'}
               </Text>
             </TouchableOpacity>
           </View>
